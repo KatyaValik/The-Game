@@ -5,6 +5,8 @@ public class World {
     private double globalVertAcc = 0.1;
     private double globalPlat = 300;
     //здесь должны быть уровни и тп и тд, но пока их нет(
+    private Level currentLevel;
+
 
     public World() {
         character = new Character(20, 20);
@@ -23,3 +25,4 @@ public class World {
         return character.getPos();
     }
 }
+

@@ -62,5 +62,6 @@ public class Controller extends JPanel {
         g2.setColor(Color.black);
         var c = world.getCharacterPos();
         g2.drawOval(c.x, c.y, 10, 10);
+
     }
 }
