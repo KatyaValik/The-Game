@@ -1,3 +1,5 @@
+package game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -57,10 +59,18 @@ public class Controller extends JPanel {
     @Override
     public void paint(Graphics g) {
         var g2 = (Graphics2D) g;
-        g2.setColor(Color.white);
-        g2.fillRect(0, 0, getWidth(), getHeight());
         g2.setColor(Color.black);
+        g2.fillRect(0, 0, getWidth(), getHeight());
+        g2.setColor(Color.cyan);
         var c = world.getCharacterPos();
-        g2.drawOval(c.x, c.y, 10, 10);
+        var cSize = world.getCharacterSize();
+        g2.drawOval(c.x, c.y, cSize.width, cSize.height);
+        g2.setColor(Color.lightGray);
+        var walls = world.getSolids();
+        for (Solid wall: walls) {
+            Point wallPos = wall.getIntPos();
+            Dimension wallSize = wall.getIntSize();
+            g2.fillRect(wallPos.x, wallPos.y, wallSize.width, wallSize.height);
+        }
     }
 }
