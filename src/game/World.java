@@ -10,11 +10,11 @@ public class World {
 
     private ArrayList<Solid> solids = new ArrayList<>() {
         {
-            add(new Wall(300, 270, 300, 3));
+            add(new Wall(300, 279, 300, 9));
             add(new Wall(0, 300, 1000, 1));
             add(new Wall (0, 0, 1, 1000));
-            add(new Wall(500, 260, 1, 300));
-            add(new Wall(1000, 0, 1, 1000));
+            add(new Wall(500, 260, 1, 300, CAction.PUSH));
+            add(new Wall(1000, 0, 1, 1000, CAction.PUSH));
         }
     };
 

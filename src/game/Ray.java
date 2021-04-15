@@ -1,12 +1,20 @@
 package game;
 
 public class Ray {
+    private CAction action;
     private Position start;
     private Position end;
 
     public Ray(Position start, Position end) {
         this.start = start;
         this.end = end;
+        this.action = CAction.NUDGE;
+    }
+
+    public Ray(Position start, Position end, CAction action) {
+        this.start = start;
+        this.end = end;
+        this.action = action;
     }
 
     public boolean endIsExactlyRighterThanStart() {
@@ -100,6 +108,10 @@ public class Ray {
         return in;
     }
     //endregion getLength and hasInter
+
+    public CAction getAction() {
+        return action;
+    }
 
     @Override
     public String toString() {

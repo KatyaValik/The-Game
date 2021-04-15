@@ -5,9 +5,16 @@ import java.awt.geom.Point2D;
 
 public class Wall implements Solid {
     private Position pos;
+    private CAction action;
 
     public Wall(double x, double y, double width, double height) {
         pos = new Position(x, y, width, height);
+        action = CAction.NUDGE;
+    }
+
+    public Wall(double x, double y, double width, double height, CAction action) {
+        pos = new Position(x, y, width, height);
+        this.action = action;
     }
 
     public Wall(Point2D pos, double width, double height) {
@@ -35,6 +42,9 @@ public class Wall implements Solid {
         return pos;
     }
 
+    public CAction getAction() {
+        return action;
+    }
     @Override
     public String toString() {
         return pos.toString();

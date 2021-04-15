@@ -6,4 +6,5 @@ public interface Solid {
     Point getIntPos();
     Dimension getIntSize();
     Position getPos();
+    CAction getAction();
 }
