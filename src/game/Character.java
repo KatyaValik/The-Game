@@ -56,7 +56,7 @@ public class Character implements Solid {
         verticalSpeed += globalAcc;
         double rayLength = (ray == null) ? Double.MAX_VALUE : ray.getLength(false, true);
         var action = (ray == null) ? CAction.NUDGE : ray.getAction();
-        if (Math.abs(rayLength) < Math.abs(verticalSpeed)) {
+        if (Math.abs(rayLength) < Math.abs(verticalSpeed) && verticalSpeed < 0) {
             switch (action) {
                 case NUDGE:
                     verticalDir = Direction.BACK;
