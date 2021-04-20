@@ -5,4 +5,5 @@ public enum CState {
     IS_DYING,
     TOUCHED_SPAWNER,
     WAITING_TRANSITION,
+    MOVING_STONE
 }

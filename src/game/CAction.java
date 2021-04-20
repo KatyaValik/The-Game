@@ -7,5 +7,5 @@ public enum CAction {
     PASS,
     SPAWN,
     RELOCATE,
-    D
+    SLAVE
 }

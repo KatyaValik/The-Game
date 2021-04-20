@@ -8,7 +8,11 @@ import java.util.ArrayList;
 public interface Level extends Serializable {
     ArrayList<Solid> getSolids();
 
-    double getG();
+    ArrayList<Stone> getStones();
 
     void update();
+
+    String getName();
+
+    double getStoneVertAcc(Stone stone);
 }

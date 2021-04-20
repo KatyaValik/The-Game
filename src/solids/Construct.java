@@ -48,7 +48,7 @@ public class Construct implements Solid {
         return action;
     }
 
-    public SType getType() { return SType.TILE;}
+    public SType getType() { return SType.CONSTRUCT;}
     @Override
     public String toString() {
         return pos.toString();

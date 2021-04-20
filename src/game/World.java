@@ -3,9 +3,11 @@ package game;
 import levels.*;
 import solids.Gate;
 import solids.Solid;
+import solids.Stone;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class World {
     private Character character;
@@ -20,10 +22,16 @@ public class World {
         LevelLoader.saveAll();
         currentLevel = LevelLoader.load("level1");
         spawnLevel = currentLevel;
-        spawnPos = new Point(15, 352);
+        spawnPos = new Point(450, 265);
     }
 
     public void moveCharacter(Direction x, Direction y) {
+        for (Stone stone : currentLevel.getStones()) {
+            var solids = (ArrayList<Solid>) currentLevel.getSolids().clone();
+            solids.add(character);
+            solids.remove(stone);
+            stone.move(Direction.NO, Direction.NO, currentLevel.getStoneVertAcc(stone), solids);
+        }
         character.move(x, y, globalVertAcc, currentLevel.getSolids());
         switch (character.getState()) {
             case IS_DYING -> {
@@ -36,10 +44,18 @@ public class World {
                 character.normalizeState();
             }
             case WAITING_TRANSITION -> {
-                var c = character.getTriggeredSolid();
                 var gate = (Gate) (character.getTriggeredSolid());
+                LevelLoader.save(currentLevel, currentLevel.getName());
                 currentLevel = LevelLoader.load(gate.getAdjacentLevel());
                 character.setPos(gate.getSpawnPos());
+                character.normalizeState();
+            }
+            case MOVING_STONE -> {
+                var stone = (Stone) (character.getTriggeredSolid());
+                var solids = (ArrayList<Solid>) currentLevel.getSolids().clone();
+                solids.add(character);
+                solids.remove(character.getTriggeredSolid());
+                stone.move(x, Direction.NO, globalVertAcc, currentLevel.getSolids());
                 character.normalizeState();
             }
         }

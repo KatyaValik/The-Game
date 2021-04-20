@@ -4,11 +4,15 @@ import game.CAction;
 import solids.Gate;
 import solids.Solid;
 import solids.Construct;
+import solids.Stone;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Level2 implements Level{
+public class Level2 implements Level {
+    private final String name = "level2";
+
     private final ArrayList<Solid> solids = new ArrayList<>() {
         {
             add(new Construct(300, 279, 300, 9));
@@ -24,12 +28,23 @@ public class Level2 implements Level{
         }
     };
 
+    private final ArrayList<Stone> stones = new ArrayList<>();
+    private HashMap<Stone, Double> stonesVertAcc;
+
+    public double getStoneVertAcc(Stone stone) {
+        return stonesVertAcc.get(stone);
+    }
+
+    public ArrayList<Stone> getStones() {
+        return stones;
+    }
+
     public ArrayList<Solid> getSolids() {
         return solids;
     }
 
-    public double getG() {
-        return 9.8;
+    public String getName() {
+        return name;
     }
 
     public void update() {

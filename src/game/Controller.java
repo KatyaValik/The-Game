@@ -68,16 +68,20 @@ public class Controller extends JPanel {
         var cSize = world.getCharacterSize();
         g2.drawOval(c.x, c.y, cSize.width, cSize.height);
         var solids = world.getSolids();
-        for (Solid solid: solids) {
+        for (Solid solid : solids) {
             Point solidPos = solid.getIntPos();
             Dimension solidSize = solid.getIntSize();
-            switch (solid.getAction()){
+            switch (solid.getAction()) {
                 case KILL -> g2.setColor(Color.red);
                 case RELOCATE -> g2.setColor(Color.yellow);
                 case SPAWN -> g2.setColor(Color.green);
+                case SLAVE -> g2.setColor(Color.pink);
                 default -> g2.setColor(Color.lightGray);
             }
-            g2.fillRect(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
+            switch (solid.getType()) {
+                case CONSTRUCT -> g2.fillRect(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
+                case STONE -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
+            }
         }
     }
 }

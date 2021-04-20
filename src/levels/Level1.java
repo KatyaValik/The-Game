@@ -2,11 +2,14 @@ package levels;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import game.*;
 import solids.*;
 
 public class Level1 implements Level {
+    private final String name = "level1";
+
     private final ArrayList<Solid> solids = new ArrayList<>() {
         {
             add(new Construct(300, 279, 300, 9));
@@ -34,12 +37,37 @@ public class Level1 implements Level {
         }
     };
 
+    private final ArrayList<Stone> stones = new ArrayList<>();
+    private HashMap<Stone, Double> stonesVertAcc;
+
+    public Level1() {
+        addStone(new Stone(450, 51));
+
+        stonesVertAcc = new HashMap<>();
+        for (Stone stone : stones) {
+            stonesVertAcc.put(stone, 0.1);
+        }
+    }
+
+    private void addStone(Stone stone) {
+        solids.add(stone);
+        stones.add(stone);
+    }
+
+    public double getStoneVertAcc(Stone stone){
+        return stonesVertAcc.get(stone);
+    }
+
+    public ArrayList<Stone> getStones() {
+        return stones;
+    }
+
     public ArrayList<Solid> getSolids() {
         return solids;
     }
 
-    public double getG() {
-        return 9.8;
+    public String getName(){
+        return name;
     }
 
     public void update() {
