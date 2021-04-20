@@ -1,5 +1,7 @@
 package game;
 
+import solids.Solid;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -65,12 +67,17 @@ public class Controller extends JPanel {
         var c = world.getCharacterPos();
         var cSize = world.getCharacterSize();
         g2.drawOval(c.x, c.y, cSize.width, cSize.height);
-        g2.setColor(Color.lightGray);
-        var walls = world.getSolids();
-        for (Solid wall: walls) {
-            Point wallPos = wall.getIntPos();
-            Dimension wallSize = wall.getIntSize();
-            g2.fillRect(wallPos.x, wallPos.y, wallSize.width, wallSize.height);
+        var solids = world.getSolids();
+        for (Solid solid: solids) {
+            Point solidPos = solid.getIntPos();
+            Dimension solidSize = solid.getIntSize();
+            switch (solid.getAction()){
+                case KILL -> g2.setColor(Color.red);
+                case RELOCATE -> g2.setColor(Color.yellow);
+                case SPAWN -> g2.setColor(Color.green);
+                default -> g2.setColor(Color.lightGray);
+            }
+            g2.fillRect(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
         }
     }
 }

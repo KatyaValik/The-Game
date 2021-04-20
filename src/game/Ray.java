@@ -1,26 +1,16 @@
 package game;
 
+import solids.Solid;
+
 public class Ray {
-    private CAction action;
+    private Solid solid;
     private Position start;
     private Position end;
 
-    public Ray(Position start, Position end) {
+    public Ray(Position start, Position end, Solid solid) {
         this.start = start;
         this.end = end;
-        this.action = CAction.NUDGE;
-    }
-
-    public Ray(Position start, Position end, CAction action) {
-        this.start = start;
-        this.end = end;
-        this.action = action;
-    }
-
-    public boolean endIsExactlyRighterThanStart() {
-        var right = start.getRight();
-        var left = end.getLeft();
-        return right.getX1() == left.getX1();
+        this.solid = solid;
     }
 
     public boolean endIsRighterThanStart() {
@@ -29,34 +19,16 @@ public class Ray {
         return right.getX1() <= left.getX1();
     }
 
-    public boolean endIsExactlyLefterThatStart() {
-        var left = start.getLeft();
-        var right = end.getRight();
-        return left.getX1() == right.getX1();
-    }
-
     public boolean endIsLefterThanStart() {
         var left = start.getLeft();
         var right = end.getRight();
         return left.getX1() >= right.getX1();
     }
 
-    public boolean endIsExactlyUponStart() {
-        var top = start.getTop();
-        var bottom = end.getBottom();
-        return top.getY1() == bottom.getY1();
-    }
-
     public boolean endIsUponStart() {
         var top = start.getTop();
         var bottom = end.getBottom();
         return top.getY1() >= bottom.getY1();
-    }
-
-    public boolean endIsExactlyUnderStart() {
-        var top = end.getTop();
-        var bottom = start.getBottom();
-        return top.getY1() == bottom.getY1();
     }
 
     public boolean endIsUnderStart() {
@@ -109,8 +81,8 @@ public class Ray {
     }
     //endregion getLength and hasInter
 
-    public CAction getAction() {
-        return action;
+    public Solid getSolid() {
+        return solid;
     }
 
     @Override

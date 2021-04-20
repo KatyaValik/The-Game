@@ -1,20 +1,32 @@
-package game;
+package solids;
 
-import solids.SType;
-import solids.Solid;
+import game.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class Character implements Solid {
-    private Position pos = new Position(20, 20, 10, 10);
+public class Stone implements Solid {
+    private Position pos;
+    private CAction action;
+
+    public Stone(double x, double y, double width, double height) {
+        pos = new Position(x, y, width, height);
+        action = CAction.NUDGE;
+    }
+
+    public Stone(double x, double y, double width, double height, CAction action) {
+        pos = new Position(x, y, width, height);
+        this.action = action;
+    }
+
+
     private double verticalSpeed;
     private double instantVertAcc = -2.7;
     private double horizontalSpeed = 0;
     private double instantHorAcc = 2;
     private Direction verticalDir = Direction.NO;
-    private CState state = CState.IS_DYING;
+    private CState state = CState.NORMAL;
     private Solid triggeredSolid;
 
     public CState getState() {
@@ -29,16 +41,16 @@ public class Character implements Solid {
         return triggeredSolid;
     }
 
-    public void fastTeleport(double x, double y) {
-        normalizeState();
+    public void revive(double x, double y) {
+        state = CState.NORMAL;
         setPos(x, y);
     }
 
-    public Character(Point2D pos) {
+    public Stone(Point2D pos) {
         setPos(pos);
     }
 
-    public Character(double x, double y) {
+    public Stone(double x, double y) {
         setPos(x, y);
         setSize(10, 10);
     }
@@ -60,14 +72,8 @@ public class Character implements Solid {
                 case NUDGE -> {
                     return pos.getX() + rayLength;
                 }
-                case KILL -> {
-                    state = CState.IS_DYING;
-                    return pos.getX() + rayLength;
-                }
-                case RELOCATE -> {
-                    state = CState.WAITING_TRANSITION;
-                    return pos.getX() + rayLength;
-                }
+                case KILL -> state = CState.IS_DYING;
+                case RELOCATE -> state = CState.WAITING_TRANSITION;
                 case SPAWN -> state = CState.TOUCHED_SPAWNER;
                 default -> {
                     return 1;
@@ -100,14 +106,8 @@ public class Character implements Solid {
                     verticalSpeed = 0;
                     return pos.getY() + rayLength;
                 }
-                case KILL -> {
-                    state = CState.IS_DYING;
-                    return pos.getY() + rayLength;
-                }
-                case RELOCATE -> {
-                    state = CState.WAITING_TRANSITION;
-                    return pos.getY() + rayLength;
-                }
+                case KILL -> state = CState.IS_DYING;
+                case RELOCATE -> state = CState.WAITING_TRANSITION;
                 default -> {
                     return 12;
                 }
@@ -305,4 +305,10 @@ public class Character implements Solid {
         return null;
     }
     //endregion Actions With Pos and Size
+
+
+    @Override
+    public String toString() {
+        return pos.toString();
+    }
 }

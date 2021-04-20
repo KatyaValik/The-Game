@@ -1,8 +1,9 @@
 package game;
 
 import java.awt.geom.Dimension2D;
+import java.io.Serializable;
 
-public class Size extends Dimension2D {
+public class Size extends Dimension2D implements Serializable {
     private double width;
     private double height;
 

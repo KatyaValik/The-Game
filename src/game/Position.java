@@ -2,8 +2,9 @@ package game;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 
-public class Position {
+public class Position implements Serializable {
     private double x;
     private double y;
     private Size size;

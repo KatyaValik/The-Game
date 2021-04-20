@@ -1,23 +1,25 @@
-package game;
+package solids;
+
+import game.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-public class Wall implements Solid {
+public class Construct implements Solid {
     private Position pos;
     private CAction action;
 
-    public Wall(double x, double y, double width, double height) {
+    public Construct(double x, double y, double width, double height) {
         pos = new Position(x, y, width, height);
         action = CAction.NUDGE;
     }
 
-    public Wall(double x, double y, double width, double height, CAction action) {
+    public Construct(double x, double y, double width, double height, CAction action) {
         pos = new Position(x, y, width, height);
         this.action = action;
     }
 
-    public Wall(Point2D pos, double width, double height) {
+    public Construct(Point2D pos, double width, double height) {
         setPos(pos.getX(), pos.getY());
         setSize(width, height);
     }
@@ -45,6 +47,8 @@ public class Wall implements Solid {
     public CAction getAction() {
         return action;
     }
+
+    public SType getType() { return SType.TILE;}
     @Override
     public String toString() {
         return pos.toString();
