@@ -24,7 +24,7 @@ public class Level2 implements Level {
             add(new Construct(1000, 0, 1, 1000, CAction.PUSH));
             add(new Construct(0, 500, 1000, 1, CAction.KILL));
 
-            add(new Gate(1, 1, 1, 1000, "level1", new Point(1, 1)));
+            add(new Gate(1, 1, 1, 1000, "level1", new Point(588, 254)));
         }
     };
 

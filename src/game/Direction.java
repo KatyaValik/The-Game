@@ -6,7 +6,7 @@ public enum Direction {
     NO(0),
     CONTINUE(1);
 
-    private int value;
+    private final int value;
     Direction(int value) {
         this.value = value;
     }

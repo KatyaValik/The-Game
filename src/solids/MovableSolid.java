@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class MoveableSolid implements Solid {
+public class MovableSolid implements Solid {
     private Position pos = new Position(20, 20, 10, 10);
     private double verticalSpeed;
     private double instantVertAcc = -2.7;
@@ -37,11 +37,11 @@ public class MoveableSolid implements Solid {
         setPos(x, y);
     }
 
-    public MoveableSolid(Point2D pos) {
+    public MovableSolid(Point2D pos) {
         setPos(pos);
     }
 
-    public MoveableSolid(double x, double y, CAction action, SType type) {
+    public MovableSolid(double x, double y, CAction action, SType type) {
         setPos(x, y);
         setSize(10, 10);
         this.action = action;

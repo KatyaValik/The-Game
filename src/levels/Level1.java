@@ -42,6 +42,9 @@ public class Level1 implements Level {
 
     public Level1() {
         addStone(new Stone(450, 51));
+        addStone(new Stone(450, 61));
+        addStone(new Stone(450, 71));
+        addStone(new Stone(450, 81));
 
         stonesVertAcc = new HashMap<>();
         for (Stone stone : stones) {

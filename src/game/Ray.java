@@ -50,7 +50,6 @@ public class Ray {
             return getProjection(start.getLeft().getX1(), start.getRight().getX1(),
                     end.getLeft().getX1(), end.getRight().getX1());
         if (x && y) return start.getPos().distance(end.getPos());
-        else if (y) return Double.MAX_VALUE;
         else return Double.MAX_VALUE;
     }
 
