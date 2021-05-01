@@ -34,31 +34,33 @@ public class Level1 implements Level {
             add(new Gate(599, 264, 1, 5, "level2", new Point(15, 352)));
             add(new Gate(599, 274, 1, 5, "level2", new Point(15, 352)));
             add(new Gate(599, 244, 1, 5, "level2", new Point(15, 352)));
+
+            add(new Stone(450, 51.1));
+            add(new Stone(450, 61.2));
+            add(new Stone(450, 71.3));
+            add(new Stone(450, 81.4));
         }
     };
 
     private final ArrayList<Stone> stones = new ArrayList<>();
-    private HashMap<Stone, Double> stonesVertAcc;
+    private final HashMap<SType, Double> globalVertAcc = new HashMap<>() {
+        {
+            put(SType.CHARACTER, 0.1);
+            put(SType.STONE, 0.1);
+        }
+    };
 
     public Level1() {
-        addStone(new Stone(450, 51));
-        addStone(new Stone(450, 61));
-        addStone(new Stone(450, 71));
-        addStone(new Stone(450, 81));
-
-        stonesVertAcc = new HashMap<>();
-        for (Stone stone : stones) {
-            stonesVertAcc.put(stone, 0.1);
+        for (Solid solid : solids) {
+            if (solid instanceof Stone)
+                stones.add((Stone) solid);
         }
     }
 
-    private void addStone(Stone stone) {
-        solids.add(stone);
-        stones.add(stone);
-    }
-
-    public double getStoneVertAcc(Stone stone){
-        return stonesVertAcc.get(stone);
+    public double getGlobalVertAcc(SType type) {
+        if (globalVertAcc.containsKey(type))
+            return globalVertAcc.get(type);
+        else return 0;
     }
 
     public ArrayList<Stone> getStones() {
@@ -69,7 +71,7 @@ public class Level1 implements Level {
         return solids;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

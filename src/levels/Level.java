@@ -14,5 +14,5 @@ public interface Level extends Serializable {
 
     String getName();
 
-    double getStoneVertAcc(Stone stone);
+    double getGlobalVertAcc(SType type);
 }

@@ -1,14 +1,12 @@
 package solids;
 
 import game.*;
-import solids.SType;
-import solids.Solid;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class MovableSolid implements Solid {
+public class Movable implements Solid {
     private Position pos = new Position(20, 20, 10, 10);
     private double verticalSpeed;
     private double instantVertAcc = -2.7;
@@ -37,11 +35,11 @@ public class MovableSolid implements Solid {
         setPos(x, y);
     }
 
-    public MovableSolid(Point2D pos) {
+    public Movable(Point2D pos) {
         setPos(pos);
     }
 
-    public MovableSolid(double x, double y, CAction action, SType type) {
+    public Movable(double x, double y, CAction action, SType type) {
         setPos(x, y);
         setSize(10, 10);
         this.action = action;
@@ -76,7 +74,7 @@ public class MovableSolid implements Solid {
                     return pos.getX() + rayLength;
                 }
                 case SPAWN -> state = CState.TOUCHED_SPAWNER;
-                case SLAVE -> state = CState.MOVING_STONE;
+                case DISPLACEABLE -> state = CState.MOVING_STONE;
                 default -> {
                     return 1;
                 }
@@ -103,7 +101,7 @@ public class MovableSolid implements Solid {
         if (Math.abs(rayLength) < Math.abs(verticalSpeed) && verticalSpeed < 0) {
             triggeredSolid = ray.getSolid();
             switch (action) {
-                case NUDGE, SLAVE -> {
+                case NUDGE, DISPLACEABLE -> {
                     verticalDir = Direction.BACK;
                     verticalSpeed = 0;
                     return pos.getY() + rayLength;
@@ -134,7 +132,7 @@ public class MovableSolid implements Solid {
         if (rayLength < verticalSpeed) {
             triggeredSolid = ray.getSolid();
             switch (action) {
-                case NUDGE, SLAVE -> verticalDir = Direction.NO;
+                case NUDGE, DISPLACEABLE -> verticalDir = Direction.NO;
                 case KILL -> state = CState.IS_DYING;
                 case RELOCATE -> state = CState.WAITING_TRANSITION;
                 default -> {
@@ -156,14 +154,14 @@ public class MovableSolid implements Solid {
             return pos.getY() + Math.min(rayLength, verticalSpeed);
         } else if (dir == Direction.FORWARD) {
             switch (action) {
-                case NUDGE, SLAVE:
+                case NUDGE, DISPLACEABLE:
                     var rayUp = getClosestCeil(solids);
                     var rayUpLength = (rayUp == null) ? Double.MAX_VALUE : rayUp.getLength(false, true);
                     var actionUp = (rayUp == null) ? CAction.NUDGE : rayUp.getSolid().getAction();
                     verticalSpeed = instantVertAcc;
                     if (Math.abs(rayUpLength) < Math.abs(verticalSpeed)) {
                         switch (actionUp) {
-                            case NUDGE, SLAVE:
+                            case NUDGE, DISPLACEABLE:
                                 verticalDir = Direction.BACK;
                                 verticalSpeed = 0;
                                 return pos.getY() + rayUpLength;
@@ -190,7 +188,7 @@ public class MovableSolid implements Solid {
             }
         } else {
             switch (action) {
-                case NUDGE, SLAVE:
+                case NUDGE, DISPLACEABLE:
                     verticalSpeed = 0;
                     return pos.getY();
                 case KILL:

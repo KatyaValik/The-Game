@@ -1,19 +1,19 @@
 package game;
 
 import levels.*;
+import solids.Character;
 import solids.Gate;
+import solids.SType;
 import solids.Solid;
 import solids.Stone;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class World {
-    private Character character;
-    private double globalVertAcc = 0.1;
+    private solids.Character character;
     private Level currentLevel;
-    private Level spawnLevel;
+    private String spawnLevelName;
     private Point spawnPos;
     //здесь должны быть уровни и тп и тд, но пока их нет(
 
@@ -21,25 +21,28 @@ public class World {
         character = new Character(20, 20);
         LevelLoader.saveAll();
         currentLevel = LevelLoader.load("level1");
-        spawnLevel = currentLevel;
+        spawnLevelName = currentLevel.getName();
         spawnPos = new Point(450, 265);
     }
 
-    public void moveCharacter(Direction x, Direction y) {
+    public void moveCharacter(Direction x, Direction y, Boolean isActionButtonPressed) {
         for (Stone stone : currentLevel.getStones()) {
-            var solids = (ArrayList<Solid>) currentLevel.getSolids().clone();
+            var solids = new ArrayList<>(currentLevel.getSolids());
             solids.add(character);
             solids.remove(stone);
-            stone.move(Direction.NO, Direction.NO, currentLevel.getStoneVertAcc(stone), solids);
+            stone.move(Direction.NO, Direction.NO, currentLevel.getGlobalVertAcc(stone.getType()), solids);
         }
-        character.move(x, y, globalVertAcc, currentLevel.getSolids());
+
+        character.move(x, y, currentLevel.getGlobalVertAcc(SType.CHARACTER), currentLevel.getSolids());
+
         switch (character.getState()) {
             case IS_DYING -> {
-                currentLevel = spawnLevel;
+                LevelLoader.save(currentLevel, currentLevel.getName());
+                currentLevel = LevelLoader.load(spawnLevelName);
                 character.fastTeleport(spawnPos.getX(), spawnPos.getY());
             }
             case TOUCHED_SPAWNER -> {
-                spawnLevel = currentLevel;
+                spawnLevelName = currentLevel.getName();
                 spawnPos = character.getIntPos();
                 character.normalizeState();
             }
@@ -52,10 +55,8 @@ public class World {
             }
             case MOVING_STONE -> {
                 var stone = (Stone) (character.getTriggeredSolid());
-                var solids = (ArrayList<Solid>) currentLevel.getSolids().clone();
-                solids.add(character);
-                solids.remove(character.getTriggeredSolid());
-                stone.move(x, Direction.NO, globalVertAcc, currentLevel.getSolids());
+                stone.move(x, Direction.NO, currentLevel.getGlobalVertAcc(SType.STONE), currentLevel.getSolids());
+                stone.normalizeState();
                 character.normalizeState();
             }
         }

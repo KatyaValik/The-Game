@@ -1,10 +1,7 @@
 package levels;
 
 import game.CAction;
-import solids.Gate;
-import solids.Solid;
-import solids.Construct;
-import solids.Stone;
+import solids.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,10 +26,17 @@ public class Level2 implements Level {
     };
 
     private final ArrayList<Stone> stones = new ArrayList<>();
-    private HashMap<Stone, Double> stonesVertAcc;
+    private final HashMap<SType, Double> globalVertAcc = new HashMap<>() {
+        {
+            put(SType.CHARACTER, 0.1);
+            put(SType.STONE, 0.1);
+        }
+    };
 
-    public double getStoneVertAcc(Stone stone) {
-        return stonesVertAcc.get(stone);
+    public double getGlobalVertAcc(SType type) {
+        if (globalVertAcc.containsKey(type))
+            return globalVertAcc.get(type);
+        else return 0;
     }
 
     public ArrayList<Stone> getStones() {

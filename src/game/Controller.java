@@ -18,7 +18,8 @@ public class Controller extends JPanel {
         public void actionPerformed(ActionEvent e) {
             Direction horDir = chooseHorDir();
             Direction vertDir = chooseVertDir();
-            world.moveCharacter(horDir, vertDir);
+            var isActionButtonPressed = keys.contains(KeyEvent.VK_E);
+            world.moveCharacter(horDir, vertDir, isActionButtonPressed);
             invalidate();
             repaint();
         }
@@ -75,7 +76,7 @@ public class Controller extends JPanel {
                 case KILL -> g2.setColor(Color.red);
                 case RELOCATE -> g2.setColor(Color.yellow);
                 case SPAWN -> g2.setColor(Color.green);
-                case SLAVE -> g2.setColor(Color.pink);
+                case DISPLACEABLE -> g2.setColor(Color.pink);
                 default -> g2.setColor(Color.lightGray);
             }
             switch (solid.getType()) {

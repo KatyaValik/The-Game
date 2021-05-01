@@ -1,8 +1,5 @@
 package levels;
 
-import levels.*;
-import solids.*;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
