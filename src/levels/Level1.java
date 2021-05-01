@@ -38,7 +38,7 @@ public class Level1 implements Level {
             add(new Stone(450, 51.1));
             add(new Stone(450, 61.2));
             add(new Stone(450, 71.3));
-            add(new Stone(450, 81.4));
+            add(new Stone(450, 81.5));
         }
     };
 
