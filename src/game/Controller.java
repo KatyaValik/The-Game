@@ -1,12 +1,15 @@
 package game;
 
+import solids.PressurePlate;
 import solids.Solid;
+import solids.Switch;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,11 +67,8 @@ public class Controller extends JPanel {
         var g2 = (Graphics2D) g;
         g2.setColor(Color.black);
         g2.fillRect(0, 0, getWidth(), getHeight());
-        g2.setColor(Color.cyan);
-        var c = world.getCharacterPos();
-        var cSize = world.getCharacterSize();
-        g2.drawOval(c.x, c.y, cSize.width, cSize.height);
         var solids = world.getSolids();
+        var deferredRendering = new ArrayList<Solid>();
         for (Solid solid : solids) {
             Point solidPos = solid.getIntPos();
             Dimension solidSize = solid.getIntSize();
@@ -76,13 +76,39 @@ public class Controller extends JPanel {
                 case KILL -> g2.setColor(Color.red);
                 case RELOCATE -> g2.setColor(Color.yellow);
                 case SPAWN -> g2.setColor(Color.green);
-                case DISPLACEABLE -> g2.setColor(Color.pink);
+                case DISPLACEABLE -> {
+                    deferredRendering.add(solid);
+                    continue;
+                }
+                case SWITCH -> {
+                    var sw = (Switch) solid;
+                    if (sw.state)
+                        g2.setColor(Color.gray);
+                    else
+                        g2.setColor(Color.darkGray);
+                }
+                case PRESS -> {
+                    var sw = (PressurePlate) solid;
+                    if (sw.getState())
+                        g2.setColor(Color.gray);
+                    else
+                        g2.setColor(Color.darkGray);
+                }
                 default -> g2.setColor(Color.lightGray);
             }
             switch (solid.getType()) {
                 case CONSTRUCT -> g2.fillRect(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
-                case STONE -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
             }
         }
+        g2.setColor(Color.pink);
+        for (Solid solid : deferredRendering) {
+            Point solidPos = solid.getIntPos();
+            Dimension solidSize = solid.getIntSize();
+            g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
+        }
+        g2.setColor(Color.cyan);
+        var c = world.getCharacterPos();
+        var cSize = world.getCharacterSize();
+        g2.drawOval(c.x, c.y, cSize.width, cSize.height);
     }
 }

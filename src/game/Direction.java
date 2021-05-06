@@ -7,6 +7,7 @@ public enum Direction {
     CONTINUE(1);
 
     private final int value;
+
     Direction(int value) {
         this.value = value;
     }

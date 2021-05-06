@@ -24,6 +24,7 @@ public class Movable implements Solid {
 
     public void normalizeState() {
         state = CState.NORMAL;
+        triggeredSolid = null;
     }
 
     public Solid getTriggeredSolid() {
@@ -35,10 +36,6 @@ public class Movable implements Solid {
         setPos(x, y);
     }
 
-    public Movable(Point2D pos) {
-        setPos(pos);
-    }
-
     public Movable(double x, double y, CAction action, SType type) {
         setPos(x, y);
         setSize(10, 10);
@@ -48,11 +45,37 @@ public class Movable implements Solid {
 
     public void move(Direction hor, Direction vert, double globalAcc, ArrayList<Solid> solids) {
         var nextX = getNextX(hor, solids);
-        if (state == CState.MOVING_STONE || state == CState.WAITING_TRANSITION)
+        if (state == CState.WAITING_TRANSITION)
             return;
         var nextY = getNextY(vert, globalAcc, solids);
 
         setPos(nextX, nextY);
+    }
+
+    public Boolean isTouchingCharacter(Direction dir, ArrayList<Solid> solids) {
+        var ray = getClosestHor(solids, dir);
+        var rayLength = (ray == null) ? Double.MAX_VALUE : ray.getLength(true, false);
+        if (Math.abs(rayLength) < Math.abs(instantHorAcc)) {
+            return ray.getSolid().getType() == SType.CHARACTER;
+        }
+        return false;
+    }
+
+    public void inspectCollision(ArrayList<Solid> solids) {
+        for (Solid solid : solids) {
+            if (Math.max(pos.getX(), solid.getPos().getX()) <
+                    Math.min(pos.getRight().getX2(), solid.getPos().getRight().getX2()) &&
+                    Math.max(pos.getTop().getY1(), solid.getPos().getTop().getY1()) <
+                            Math.min(pos.getBottom().getY1(), solid.getPos().getBottom().getY1())) {
+                switch (solid.getAction()) {
+                    case SWITCH -> {
+                        state = CState.TOUCHED_SWITCH;
+                        triggeredSolid = solid;
+                    }
+                    default -> System.out.println("#");
+                }
+            }
+        }
     }
 
     public double getNextX(Direction dir, ArrayList<Solid> solids) {
@@ -74,7 +97,11 @@ public class Movable implements Solid {
                     return pos.getX() + rayLength;
                 }
                 case SPAWN -> state = CState.TOUCHED_SPAWNER;
-                case DISPLACEABLE -> state = CState.MOVING_STONE;
+                case DISPLACEABLE -> {
+                    state = CState.MOVING_STONE;
+                    return pos.getX() + rayLength;
+                }
+                //case SWITCH -> state = CState.TOUCHED_SWITCH;
                 default -> {
                     return 1;
                 }
@@ -114,6 +141,7 @@ public class Movable implements Solid {
                     state = CState.WAITING_TRANSITION;
                     return pos.getY() + rayLength;
                 }
+                case SWITCH -> state = CState.TOUCHED_SWITCH;
                 default -> {
                     return 12;
                 }
@@ -135,6 +163,10 @@ public class Movable implements Solid {
                 case NUDGE, DISPLACEABLE -> verticalDir = Direction.NO;
                 case KILL -> state = CState.IS_DYING;
                 case RELOCATE -> state = CState.WAITING_TRANSITION;
+                //case SWITCH -> {
+                //    state = CState.TOUCHED_SWITCH;
+                //    return pos.getY() + verticalSpeed;
+                //}
                 default -> {
                     return 12;
                 }
@@ -171,6 +203,9 @@ public class Movable implements Solid {
                             case RELOCATE:
                                 state = CState.WAITING_TRANSITION;
                                 return 0;
+                            //case SWITCH:
+                            //    state = CState.TOUCHED_SWITCH;
+                            //    return pos.getY() + verticalSpeed;
                             default:
                                 return 12;
                         }
@@ -183,6 +218,9 @@ public class Movable implements Solid {
                 case RELOCATE:
                     state = CState.WAITING_TRANSITION;
                     return 0;
+                //case SWITCH:
+                //    state = CState.TOUCHED_SWITCH;
+                //    return pos.getY() + verticalSpeed;
                 default:
                     return 12;
             }
@@ -197,6 +235,9 @@ public class Movable implements Solid {
                 case RELOCATE:
                     state = CState.WAITING_TRANSITION;
                     return 0;
+                //case SWITCH:
+                //    state = CState.TOUCHED_SWITCH;
+                //    return pos.getY() + verticalSpeed;
                 default:
                     return 12;
             }
@@ -208,7 +249,7 @@ public class Movable implements Solid {
     public Ray getClosestCeil(ArrayList<Solid> solids) {
         Ray min = null;
         for (var solid : solids) {
-            if (solid.getAction() != CAction.PASS && solid.getAction() != CAction.SPAWN) {
+            if (solid.getAction() != CAction.PASS && solid.getAction() != CAction.SPAWN && solid.getAction() != CAction.SWITCH && solid.getAction() != CAction.PRESS) {
                 var ray = new Ray(pos, solid.getPos(), solid);
                 var length = ray.getLength(false, true);
                 if (Math.abs(length) < Double.MAX_VALUE && ray.endIsUponStart() &&
@@ -231,11 +272,13 @@ public class Movable implements Solid {
     public Ray getClosestRight(ArrayList<Solid> solids) {
         Ray min = null;
         for (var solid : solids) {
-            if (solid.getAction() != CAction.PASS) {
+            if (solid.getAction() != CAction.PASS && solid.getAction() != CAction.SWITCH && solid.getAction() != CAction.PRESS) {
                 var ray = new Ray(pos, solid.getPos(), solid);
                 var length = ray.getLength(true, false);
                 if (Math.abs(length) < Double.MAX_VALUE && ray.endIsRighterThanStart() &&
-                        (min == null || Math.abs(min.getLength(true, false)) > Math.abs(length))) {
+                        (min == null || Math.abs(min.getLength(true, false)) > Math.abs(length) ||
+                                Math.abs(min.getLength(true, false)) == Math.abs(length)
+                                        && ray.getSolid().getType() == SType.CHARACTER)) {
                     min = ray;
                 }
             }
@@ -246,14 +289,14 @@ public class Movable implements Solid {
     public Ray getClosestLeft(ArrayList<Solid> solids) {
         Ray min = null;
         for (var solid : solids) {
-            if (solid.getAction() != CAction.PASS) {
+            if (solid.getAction() != CAction.PASS && solid.getAction() != CAction.SWITCH && solid.getAction() != CAction.PRESS) {
                 var ray = new Ray(pos, solid.getPos(), solid);
                 var length = ray.getLength(true, false);
                 if (Math.abs(length) < Double.MAX_VALUE && ray.endIsLefterThanStart() &&
-                        (min == null || Math.abs(min.getLength(true, false)) > Math.abs(length))) {
-                    {
-                        min = ray;
-                    }
+                        (min == null || Math.abs(min.getLength(true, false)) > Math.abs(length) ||
+                                Math.abs(min.getLength(true, false)) == Math.abs(length)
+                                        && ray.getSolid().getType() == SType.CHARACTER)) {
+                    min = ray;
                 }
             }
         }
@@ -263,7 +306,7 @@ public class Movable implements Solid {
     public Ray getClosestPlatform(ArrayList<Solid> solids) {
         Ray min = null;
         for (var solid : solids) {
-            if (solid.getAction() != CAction.PASS && solid.getAction() != CAction.SPAWN) {
+            if (solid.getAction() != CAction.PASS && solid.getAction() != CAction.SPAWN && solid.getAction() != CAction.SWITCH && solid.getAction() != CAction.PRESS) {
                 var ray = new Ray(pos, solid.getPos(), solid);
                 var length = ray.getLength(false, true);
                 if (Math.abs(length) < Double.MAX_VALUE && ray.endIsUnderStart() &&

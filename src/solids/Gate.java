@@ -18,7 +18,7 @@ public class Gate extends Construct {
         return adjacentLevel;
     }
 
-    public Point getSpawnPos(){
+    public Point getSpawnPos() {
         return spawnPos;
     }
 }

@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class Construct implements Solid {
-    private Position pos;
+    protected Position pos;
     private CAction action;
 
     public Construct(double x, double y, double width, double height) {
@@ -48,7 +48,10 @@ public class Construct implements Solid {
         return action;
     }
 
-    public SType getType() { return SType.CONSTRUCT;}
+    public SType getType() {
+        return SType.CONSTRUCT;
+    }
+
     @Override
     public String toString() {
         return pos.toString();

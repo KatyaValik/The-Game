@@ -19,7 +19,7 @@ public class Level2 implements Level {
             add(new Construct(250, 310, 100, 9));
             add(new Construct(0, 0, 1, 1000));
             add(new Construct(1000, 0, 1, 1000, CAction.PUSH));
-            add(new Construct(0, 500, 1000, 1, CAction.KILL));
+            add(new Killer(0, 500, 1000, 1));
 
             add(new Gate(1, 1, 1, 1000, "level1", new Point(588, 254)));
         }

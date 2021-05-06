@@ -21,7 +21,7 @@ public class Level1 implements Level {
             add(new Construct(31, 50, 989, 1));
             add(new Construct(31, 51, 1, 250));
             add(new Construct(1000, 0, 1, 1000, CAction.PUSH));
-            add(new Construct(0, 500, 1000, 1, CAction.KILL));
+            add(new Killer(0, 500, 1000, 1));
 
             add(new Teleport(15, 332, 20));
             add(new Teleport(125, 310, 20));
@@ -39,6 +39,10 @@ public class Level1 implements Level {
             add(new Stone(450, 61.2));
             add(new Stone(450, 71.3));
             add(new Stone(450, 81.5));
+
+            add(new Switch(420, 270, false));
+
+            add(new PressurePlate(350, 277, 30, 5));
         }
     };
 

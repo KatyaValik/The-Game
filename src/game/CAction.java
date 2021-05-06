@@ -6,6 +6,8 @@ public enum CAction {
     KILL,
     PASS,
     SPAWN,
+    PRESS,
+    SWITCH,
     RELOCATE,
     DISPLACEABLE
 }
