@@ -10,6 +10,8 @@ public interface Level extends Serializable {
 
     ArrayList<Stone> getStones();
 
+    ArrayList<PressurePlate> getPlates();
+
     void update();
 
     String getName();

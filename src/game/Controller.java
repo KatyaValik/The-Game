@@ -68,7 +68,6 @@ public class Controller extends JPanel {
         g2.setColor(Color.black);
         g2.fillRect(0, 0, getWidth(), getHeight());
         var solids = world.getSolids();
-        var deferredRendering = new ArrayList<Solid>();
         for (Solid solid : solids) {
             Point solidPos = solid.getIntPos();
             Dimension solidSize = solid.getIntSize();
@@ -76,35 +75,27 @@ public class Controller extends JPanel {
                 case KILL -> g2.setColor(Color.red);
                 case RELOCATE -> g2.setColor(Color.yellow);
                 case SPAWN -> g2.setColor(Color.green);
-                case DISPLACEABLE -> {
-                    deferredRendering.add(solid);
-                    continue;
-                }
+                case DISPLACEABLE -> g2.setColor(Color.pink);
                 case SWITCH -> {
                     var sw = (Switch) solid;
-                    if (sw.state)
-                        g2.setColor(Color.gray);
-                    else
+                    if (sw.getState())
                         g2.setColor(Color.darkGray);
+                    else
+                        g2.setColor(Color.gray);
                 }
                 case PRESS -> {
                     var sw = (PressurePlate) solid;
                     if (sw.getState())
-                        g2.setColor(Color.gray);
-                    else
                         g2.setColor(Color.darkGray);
+                    else
+                        g2.setColor(Color.gray);
                 }
                 default -> g2.setColor(Color.lightGray);
             }
             switch (solid.getType()) {
                 case CONSTRUCT -> g2.fillRect(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
+                case STONE -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
             }
-        }
-        g2.setColor(Color.pink);
-        for (Solid solid : deferredRendering) {
-            Point solidPos = solid.getIntPos();
-            Dimension solidSize = solid.getIntSize();
-            g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
         }
         g2.setColor(Color.cyan);
         var c = world.getCharacterPos();

@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import game.*;
 import solids.*;
 
 public class Level1 implements Level {
@@ -12,41 +11,50 @@ public class Level1 implements Level {
 
     private final ArrayList<Solid> solids = new ArrayList<>() {
         {
-            add(new Construct(300, 279, 300, 9));
-            add(new Construct(0, 367, 30, 9));
-            add(new Construct(100, 344, 50, 9));
-            add(new Construct(250, 344, 100, 9));
-            add(new Construct(250, 310, 100, 9));
-            add(new Construct(0, 0, 1, 1000));
-            add(new Construct(31, 50, 989, 1));
-            add(new Construct(31, 51, 1, 250));
-            add(new Construct(1000, 0, 1, 1000, CAction.PUSH));
-            add(new Killer(0, 500, 1000, 1));
+            add(new Construct(800, 300, 10, 150));
+            add(new Construct(820, 300, 10, 150));
+            add(new Construct(840, 300, 10, 150));
+            add(new Construct(860, 300, 10, 150));
+            add(new Construct(880, 300, 10, 150));
+            add(new Construct(900, 300, 10, 150));
+            add(new Construct(920, 300, 10, 150));
+            add(new Construct(940, 300, 10, 150));
+            add(new Construct(960, 300, 10, 150));
+            add(new Construct(980, 300, 10, 150));
+            add(new Construct(1000, 300, 10, 150));
 
-            add(new Teleport(15, 332, 20));
-            add(new Teleport(125, 310, 20));
+            add(new PressurePlate(450, 473, 30, 3));
+            add(new PressurePlate(500, 473, 30, 3));
+            add(new PressurePlate(550, 473, 30, 3));
+            add(new PressurePlate(600, 473, 30, 3));
+            add(new PressurePlate(650, 473, 30, 3));
+            add(new PressurePlate(700, 473, 30, 3));
 
-            add(new Gate(599, 204, 1, 5, "level2", new Point(15, 352)));
-            add(new Gate(599, 234, 1, 5, "level2", new Point(15, 352)));
-            add(new Gate(599, 224, 1, 5, "level2", new Point(15, 352)));
-            add(new Gate(599, 214, 1, 5, "level2", new Point(15, 352)));
-            add(new Gate(599, 254, 1, 5, "level2", new Point(15, 352)));
-            add(new Gate(599, 264, 1, 5, "level2", new Point(15, 352)));
-            add(new Gate(599, 274, 1, 5, "level2", new Point(15, 352)));
-            add(new Gate(599, 244, 1, 5, "level2", new Point(15, 352)));
+            add(new Construct(0, 0, 1100, 300));
+            add(new Construct(0, 0, 200, 1000));
+            add(new Construct(0, 475, 1100, 500));
+            add(new Construct(1100, 0, 500, 1500));
 
-            add(new Stone(450, 51.1));
-            add(new Stone(450, 61.2));
-            add(new Stone(450, 71.3));
-            add(new Stone(450, 81.5));
+            add(new Construct(0, 450, 400, 50));
+            add(new Construct(750, 450, 400, 50));
 
-            add(new Switch(420, 270, false));
+            add(new Stone(575, 463));
 
-            add(new PressurePlate(350, 277, 30, 5));
+            add(new Switch(225, 440, false));
+            add(new Switch(250, 440, false));
+            add(new Switch(275, 440, false));
+            add(new Switch(300, 440, false));
+            add(new Switch(325, 440, false));
+            add(new Switch(350, 440, false));
+            add(new Switch(375, 440, false));
+
+            add(new Gate(1090, 300, 10, 150, "level2", new Point(210, 439)));
         }
     };
 
     private final ArrayList<Stone> stones = new ArrayList<>();
+    private final ArrayList<Switch> switches = new ArrayList<>();
+    private final ArrayList<PressurePlate> plates = new ArrayList<>();
     private final HashMap<SType, Double> globalVertAcc = new HashMap<>() {
         {
             put(SType.CHARACTER, 0.1);
@@ -56,8 +64,13 @@ public class Level1 implements Level {
 
     public Level1() {
         for (Solid solid : solids) {
-            if (solid instanceof Stone)
+            if (solid instanceof Stone) {
                 stones.add((Stone) solid);
+            } else if (solid instanceof Switch) {
+                switches.add((Switch) solid);
+            } else if (solid instanceof PressurePlate) {
+                plates.add((PressurePlate) solid);
+            }
         }
     }
 
@@ -75,10 +88,37 @@ public class Level1 implements Level {
         return solids;
     }
 
+    public ArrayList<PressurePlate> getPlates() {
+        return plates;
+    }
+
     public String getName() {
         return name;
     }
 
     public void update() {
+        moveConstruct((Construct) solids.get(0), switches.get(0).getState() & !plates.get(1).getState());
+        moveConstruct((Construct) solids.get(1), switches.get(4).getState() & !plates.get(0).getState());
+        moveConstruct((Construct) solids.get(2), !switches.get(6).getState() ^ !plates.get(5).getState());
+        moveConstruct((Construct) solids.get(3), !switches.get(1).getState() ^ !plates.get(2).getState());
+        moveConstruct((Construct) solids.get(4), !switches.get(0).getState() ^ !plates.get(4).getState());
+        moveConstruct((Construct) solids.get(5), switches.get(4).getState() & !plates.get(5).getState());
+        moveConstruct((Construct) solids.get(6), !switches.get(3).getState() & plates.get(3).getState());
+        moveConstruct((Construct) solids.get(7), switches.get(5).getState() & plates.get(3).getState());
+        moveConstruct((Construct) solids.get(8), switches.get(1).getState() & !plates.get(4).getState());
+        moveConstruct((Construct) solids.get(9), switches.get(2).getState() & !plates.get(2).getState());
+        moveConstruct((Construct) solids.get(10), switches.get(5).getState() & !plates.get(0).getState());
+    }
+
+    private void moveConstruct(Construct construct, boolean state) {
+        if (state) {
+            if (construct.getPos().getY() > 200) {
+                construct.setPos(construct.getPos().getX(), construct.getPos().getY() - 1);
+            }
+        } else {
+            if (construct.getPos().getY() < 300) {
+                construct.setPos(construct.getPos().getX(), construct.getPos().getY() + 1);
+            }
+        }
     }
 }

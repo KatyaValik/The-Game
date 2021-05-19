@@ -13,14 +13,13 @@ public class World {
     private String spawnLevelName;
     private Point spawnPos;
     private Boolean isActionButtonProcessed = false;
-    //здесь должны быть уровни и тп и тд, но пока их нет(
 
     public World() {
         character = new Character(20, 20);
         LevelLoader.saveAll();
         currentLevel = LevelLoader.load("level1");
         spawnLevelName = currentLevel.getName();
-        spawnPos = new Point(450, 265);
+        spawnPos = new Point(300, 439);
     }
 
     public void moveCharacter(Direction x, Direction y, Boolean isActionButtonPressed) {
@@ -36,6 +35,7 @@ public class World {
         } else
             moveCharacterWithoutStone(x, y, isActionButtonPressed);
         inspectPlate();
+        currentLevel.update();
     }
 
     public void moveStones() {
@@ -48,14 +48,11 @@ public class World {
     }
 
     public void inspectPlate() {
-        for (Solid solid : currentLevel.getSolids()) {
-            if (solid instanceof PressurePlate) {
-                var plate = (PressurePlate) solid;
-                var solids = new ArrayList<>(currentLevel.getSolids());
-                solids.add(character);
-                solids.remove(plate);
-                plate.inspectCollision(solids);
-            }
+        for (PressurePlate plate : currentLevel.getPlates()) {
+            var solids = new ArrayList<>(currentLevel.getSolids());
+            solids.add(character);
+            solids.remove(plate);
+            plate.inspectCollision(solids);
         }
     }
 
@@ -109,7 +106,6 @@ public class World {
                     var sw = (Switch) (character.getTriggeredSolid());
                     sw.toggle();
                     isActionButtonProcessed = true;
-                    System.out.println(sw.state);
                 }
                 character.normalizeState();
             }

@@ -72,7 +72,6 @@ public class Movable implements Solid {
                         state = CState.TOUCHED_SWITCH;
                         triggeredSolid = solid;
                     }
-                    default -> System.out.println("#");
                 }
             }
         }
