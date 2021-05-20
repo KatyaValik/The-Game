@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,14 +43,16 @@ public class Controller extends JPanel {
 
     public Controller() {
         super();
-        setSize(640, 480);
-        setPreferredSize(getSize());
         setFocusable(true);
         setDoubleBuffered(true);
         timer.start();
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    setVisible(false);
+                    System.exit(0);
+                }
                 keys.add(e.getKeyCode());
             }
 
