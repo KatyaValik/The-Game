@@ -49,12 +49,15 @@ public class Level1 implements Level {
             add(new Switch(375, 440, false));
 
             add(new Gate(1090, 300, 10, 150, "level2", new Point(210, 439)));
+
+            add(new MovingEnemy(1050, 440, 100.0, 50));
         }
     };
 
     private final ArrayList<Stone> stones = new ArrayList<>();
     private final ArrayList<Switch> switches = new ArrayList<>();
     private final ArrayList<PressurePlate> plates = new ArrayList<>();
+    private final ArrayList<Enemy> enemies = new ArrayList<>();
     private final HashMap<SType, Double> globalVertAcc = new HashMap<>() {
         {
             put(SType.CHARACTER, 0.1);
@@ -70,7 +73,8 @@ public class Level1 implements Level {
                 switches.add((Switch) solid);
             } else if (solid instanceof PressurePlate) {
                 plates.add((PressurePlate) solid);
-            }
+            } else if (solid instanceof Enemy)
+                enemies.add((Enemy) solid);
         }
     }
 
@@ -90,6 +94,10 @@ public class Level1 implements Level {
 
     public ArrayList<PressurePlate> getPlates() {
         return plates;
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
     }
 
     public String getName() {

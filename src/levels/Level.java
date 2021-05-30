@@ -12,6 +12,8 @@ public interface Level extends Serializable {
 
     ArrayList<PressurePlate> getPlates();
 
+    ArrayList<Enemy> getEnemies();
+
     void update();
 
     String getName();
