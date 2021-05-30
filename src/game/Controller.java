@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Controller extends JPanel {
+public class    Controller extends JPanel{
     private Set<Integer> keys = new HashSet<>();
     private World world = new World();
     private Timer timer = new Timer(10, new AbstractAction() {
@@ -91,11 +91,13 @@ public class Controller extends JPanel {
                     else
                         g2.setColor(Color.gray);
                 }
+                case MOVING -> g2.setColor(Color.white);
                 default -> g2.setColor(Color.lightGray);
             }
             switch (solid.getType()) {
                 case CONSTRUCT -> g2.fillRect(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
                 case STONE -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
+                case ENEMY -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
             }
         }
         g2.setColor(Color.cyan);

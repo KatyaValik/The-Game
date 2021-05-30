@@ -9,5 +9,6 @@ public enum CAction {
     PRESS,
     SWITCH,
     RELOCATE,
-    DISPLACEABLE
+    DISPLACEABLE,
+    MOVING
 }

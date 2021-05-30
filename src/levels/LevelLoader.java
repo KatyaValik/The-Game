@@ -21,6 +21,7 @@ public class LevelLoader {
         save(new Level0(), "level0");
         save(new Level1(), "level1");
         save(new Level2(), "level2");
+        //save(new Level3(), "level3");
     }
 
     static public Level load(String levelName) {

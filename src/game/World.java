@@ -23,7 +23,9 @@ public class World {
     }
 
     public void moveCharacter(Direction x, Direction y, Boolean isActionButtonPressed) {
+        moveEnemy();
         moveStones();
+        inspectEnemy(x);
         if (!isActionButtonPressed && character.getState() == CState.MOVING_STONE && x != Direction.NO)
             character.normalizeState();
 
@@ -109,6 +111,24 @@ public class World {
                 }
                 character.normalizeState();
             }
+        }
+    }
+
+    public void inspectEnemy(Direction x) {
+        var solids = new ArrayList<>(currentLevel.getSolids());
+        for (Enemy enemy : currentLevel.getEnemies()) {
+            if (enemy.inspectDeath(character)) {
+                LevelLoader.save(currentLevel, currentLevel.getName());
+                currentLevel = LevelLoader.load(spawnLevelName);
+                character.fastTeleport(spawnPos.getX(), spawnPos.getY());
+            }
+        }
+
+    }
+
+    public void moveEnemy() {
+        for (Enemy enemy : currentLevel.getEnemies()) {
+            enemy.moveEnemy();
         }
     }
 

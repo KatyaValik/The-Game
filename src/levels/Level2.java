@@ -40,6 +40,7 @@ public class Level2 implements Level {
     private final ArrayList<Stone> stones = new ArrayList<>();
     private final ArrayList<Switch> switches = new ArrayList<>();
     private final ArrayList<PressurePlate> plates = new ArrayList<>();
+    private final ArrayList<Enemy> enemies = new ArrayList<>();
     private final HashMap<SType, Double> globalVertAcc = new HashMap<>() {
         {
             put(SType.CHARACTER, 0.1);
@@ -75,6 +76,10 @@ public class Level2 implements Level {
 
     public ArrayList<PressurePlate> getPlates() {
         return plates;
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
     }
 
     public String getName() {
