@@ -84,11 +84,11 @@ public class Movable implements Solid {
         if (Math.abs(rayLength) < Math.abs(instantHorAcc)) {
             triggeredSolid = ray.getSolid();
             switch (action) {
-                case NUDGE -> {
-                    return pos.getX() + rayLength;
-                }
                 case KILL -> {
                     state = CState.IS_DYING;
+                    return pos.getX() + rayLength;
+                }
+                case NUDGE -> {
                     return pos.getX() + rayLength;
                 }
                 case RELOCATE -> {
@@ -127,13 +127,13 @@ public class Movable implements Solid {
         if (Math.abs(rayLength) < Math.abs(verticalSpeed) && verticalSpeed < 0) {
             triggeredSolid = ray.getSolid();
             switch (action) {
+                case KILL -> {
+                    state = CState.IS_DYING;
+                    return pos.getY() + rayLength;
+                }
                 case NUDGE, DISPLACEABLE -> {
                     verticalDir = Direction.BACK;
                     verticalSpeed = 0;
-                    return pos.getY() + rayLength;
-                }
-                case KILL -> {
-                    state = CState.IS_DYING;
                     return pos.getY() + rayLength;
                 }
                 case RELOCATE -> {
@@ -159,8 +159,8 @@ public class Movable implements Solid {
         if (rayLength < verticalSpeed) {
             triggeredSolid = ray.getSolid();
             switch (action) {
-                case NUDGE, DISPLACEABLE -> verticalDir = Direction.NO;
                 case KILL -> state = CState.IS_DYING;
+                case NUDGE, DISPLACEABLE -> verticalDir = Direction.NO;
                 case RELOCATE -> state = CState.WAITING_TRANSITION;
                 //case SWITCH -> {
                 //    state = CState.TOUCHED_SWITCH;
@@ -185,6 +185,9 @@ public class Movable implements Solid {
             return pos.getY() + Math.min(rayLength, verticalSpeed);
         } else if (dir == Direction.FORWARD) {
             switch (action) {
+                case KILL:
+                    state = CState.IS_DYING;
+                    return 0;
                 case NUDGE, DISPLACEABLE:
                     var rayUp = getClosestCeil(solids);
                     var rayUpLength = (rayUp == null) ? Double.MAX_VALUE : rayUp.getLength(false, true);
@@ -192,13 +195,13 @@ public class Movable implements Solid {
                     verticalSpeed = instantVertAcc;
                     if (Math.abs(rayUpLength) < Math.abs(verticalSpeed)) {
                         switch (actionUp) {
+                            case KILL:
+                                state = CState.IS_DYING;
+                                return 0;
                             case NUDGE, DISPLACEABLE:
                                 verticalDir = Direction.BACK;
                                 verticalSpeed = 0;
                                 return pos.getY() + rayUpLength;
-                            case KILL:
-                                state = CState.IS_DYING;
-                                return 0;
                             case RELOCATE:
                                 state = CState.WAITING_TRANSITION;
                                 return 0;
@@ -211,9 +214,6 @@ public class Movable implements Solid {
                     } else verticalDir = Direction.FORWARD;
 
                     return pos.getY() + verticalSpeed;
-                case KILL:
-                    state = CState.IS_DYING;
-                    return 0;
                 case RELOCATE:
                     state = CState.WAITING_TRANSITION;
                     return 0;
@@ -225,12 +225,12 @@ public class Movable implements Solid {
             }
         } else {
             switch (action) {
-                case NUDGE, DISPLACEABLE:
-                    verticalSpeed = 0;
-                    return pos.getY();
                 case KILL:
                     state = CState.IS_DYING;
                     return 0;
+                case NUDGE, DISPLACEABLE:
+                    verticalSpeed = 0;
+                    return pos.getY();
                 case RELOCATE:
                     state = CState.WAITING_TRANSITION;
                     return 0;

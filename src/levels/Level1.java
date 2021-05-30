@@ -50,7 +50,7 @@ public class Level1 implements Level {
 
             add(new Gate(1090, 300, 10, 150, "level2", new Point(210, 439)));
 
-            add(new MovingEnemy(1050, 440, 100.0, 50));
+            add(new MovingEnemy(500, 500, 100.0, 2));
         }
     };
 

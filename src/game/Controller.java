@@ -73,7 +73,7 @@ public class    Controller extends JPanel{
             Point solidPos = solid.getIntPos();
             Dimension solidSize = solid.getIntSize();
             switch (solid.getAction()) {
-                case KILL -> g2.setColor(Color.red);
+                case KILL -> g2.setColor(Color.getHSBColor(0.76f, 0.5f, 0.5f));
                 case RELOCATE -> g2.setColor(Color.yellow);
                 case SPAWN -> g2.setColor(Color.green);
                 case DISPLACEABLE -> g2.setColor(Color.pink);
@@ -91,13 +91,11 @@ public class    Controller extends JPanel{
                     else
                         g2.setColor(Color.gray);
                 }
-                case MOVING -> g2.setColor(Color.white);
                 default -> g2.setColor(Color.lightGray);
             }
             switch (solid.getType()) {
                 case CONSTRUCT -> g2.fillRect(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
-                case STONE -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
-                case ENEMY -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
+                case STONE, ENEMY -> g2.drawOval(solidPos.x, solidPos.y, solidSize.width, solidSize.height);
             }
         }
         g2.setColor(Color.cyan);
