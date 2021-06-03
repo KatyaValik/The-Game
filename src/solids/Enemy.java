@@ -22,7 +22,7 @@ public class Enemy extends Movable {
         this.height = height;
         this.startX =  x;
         this.startY = y;
-        this.verticalDir = Direction.UP;
+        this.verticalDir = Direction.FORWARD;
     }
 
     public void moveEnemy() {
@@ -31,19 +31,19 @@ public class Enemy extends Movable {
 
     public double getNextY() {
         switch (verticalDir) {
-            case UP:
+            case FORWARD:
                 if (this.getPos().getY() > this.startY - this.height) {
                     return this.getPos().getY() - speed;
 
                 } else {
-                    this.verticalDir = Direction.DOWN;
+                    this.verticalDir = Direction.BACK;
                     return this.getPos().getY() + speed;
                 }
-            case DOWN:
+            case BACK:
                 if (this.getPos().getY() < startY) {
                     return this.getPos().getY() + speed;
                 } else {
-                    this.verticalDir = Direction.UP;
+                    this.verticalDir = Direction.FORWARD;
                     return this.getPos().getY() - speed;
                 }
         }

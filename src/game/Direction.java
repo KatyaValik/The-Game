@@ -4,9 +4,7 @@ public enum Direction {
     FORWARD(1),
     BACK(-1),
     NO(0),
-    CONTINUE(1),
-    UP(2),
-    DOWN(-2);
+    CONTINUE(1);
 
     private final int value;
 

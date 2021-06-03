@@ -22,6 +22,14 @@ public class    Controller extends JPanel{
             Direction vertDir = chooseVertDir();
             var isActionButtonPressed = keys.contains(KeyEvent.VK_E);
             world.moveCharacter(horDir, vertDir, isActionButtonPressed);
+//            invalidate();
+//            repaint();
+        }
+    });
+
+    private Timer painter = new Timer(10, new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
             invalidate();
             repaint();
         }
@@ -46,6 +54,7 @@ public class    Controller extends JPanel{
         setFocusable(true);
         setDoubleBuffered(true);
         timer.start();
+        painter.start();
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
