@@ -38,7 +38,7 @@ public class Level1 implements Level {
             add(new Construct(0, 450, 400, 50));
             add(new Construct(750, 450, 400, 50));
 
-            add(new Stone(575, 463));
+            add(new Stone(570, 463));
 
             add(new Switch(225, 440, false));
             add(new Switch(250, 440, false));
@@ -50,7 +50,12 @@ public class Level1 implements Level {
 
             add(new Gate(1090, 300, 10, 150, "level2", new Point(210, 439)));
 
-            add(new MovingEnemy(500, 500, 100.0, 2));
+            add(new MovingEnemy(1050, 440, 100.0, 1));
+            add(new MovingEnemy(485, 465, 110.0, 1));
+            add(new MovingEnemy(535, 465, 120.0, 1));
+            add(new MovingEnemy(585, 465, 130.0, 1));
+            add(new MovingEnemy(635, 465, 140.0, 1));
+            add(new MovingEnemy(685, 465, 150.0, 1));
         }
     };
 
