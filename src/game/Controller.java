@@ -18,30 +18,18 @@ public class    Controller extends JPanel{
     private Timer timer = new Timer(10, new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println();
             Direction horDir = chooseHorDir();
             Direction vertDir = chooseVertDir();
             var isActionButtonPressed = keys.contains(KeyEvent.VK_E);
             world.moveCharacter(horDir, vertDir, isActionButtonPressed);
-//            invalidate();
-//            repaint();
         }
     });
-
-//    private void updater() {
-//        Direction horDir = chooseHorDir();
-//        Direction vertDir = chooseVertDir();
-//        var isActionButtonPressed = keys.contains(KeyEvent.VK_E);
-//        world.moveCharacter(horDir, vertDir, isActionButtonPressed);
-//        try {
-//            Thread.sleep(10);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private Timer another = new Timer(10, new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println();
             invalidate();
             repaint();
         }
@@ -65,12 +53,8 @@ public class    Controller extends JPanel{
         super();
         setFocusable(true);
         setDoubleBuffered(true);
-        var t = new Thread(() -> timer.start());
-        var s = new Thread(() -> another.start());
-//        timer.start();
-//        another.start();
-        t.start();
-        s.start();
+        timer.start();
+        another.start();
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
